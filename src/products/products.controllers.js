@@ -1,29 +1,55 @@
-const findAllProducts = async() => {
-    //? Your code here:
-}
+const Products = require("../models/products.models");
 
-const findProductById = async(id) => {
-    //? Your code here:
-}
+const findAllProducts = async () => {
+    const products = await Products.findAll();
+    return products;
+};
 
-const createProduct = async(productObj) => {
-    //? Your code here:
-}
+const findProductById = async (id) => {
+    const product = await Products.findOne({
+        where: {
+            id: id,
+        },
+    });
+    return product;
+};
 
-const updateProduct = async(id, productObj) => {
-    //? Your code here:
-    
-}
+const createProduct = async (productObj) => {
+    const newPost = await Products.create({
+        name: productObj.name,
+        description: productObj.description,
+        price: productObj.price,
+        stock: productObj.stock,
+    });
+    return newPost;
+};
 
-const deleteProduct = async(id) => {
-    //? Your code here:
+const updateProduct = async (id, productObj) => {
+    const selectedProduct = await Products.findOne({
+        where: {
+            id: id,
+        },
+    });
 
-}
+    if (!selectedProduct) return null;
+
+    const updateProduct = await selectedProduct.update(productObj);
+    return updateProduct;
+};
+
+const deleteProduct = async (id) => {
+    const product = await Products.destroy({
+        where: {
+            id: id,
+        },
+    });
+    return product;
+};
 
 module.exports = {
     findAllProducts,
     findProductById,
     createProduct,
     updateProduct,
-    deleteProduct
-}
+    deleteProduct,
+};
